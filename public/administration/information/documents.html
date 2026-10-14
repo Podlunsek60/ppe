@@ -1,0 +1,37 @@
+<div class="page-card">
+    <header class="page-header">
+        <div class="page-header-top">
+            <h1 class="page-title">Documents associés à une information</h1>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <menu></menu>
+        <section class="documents-admin-panel">
+            <h2 id="titreInformation"></h2>
+            <a class="btn btn-outline-secondary mb-3" href="./">Retour aux informations</a>
+            <form id="formDocuments" class="mb-4">
+                <label for="fichiers" class="form-label">Attacher un ou plusieurs documents PDF</label>
+                <div class="input-group">
+                    <input id="fichiers" class="form-control" type="file" accept="application/pdf,.pdf" multiple required>
+                    <button class="btn btn-warning" type="submit">Attacher les documents</button>
+                </div>
+                <div class="form-text">PDF uniquement, 20 Mo maximum par fichier.</div>
+            </form>
+
+            <h2>Documents déjà associés</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                    <thead>
+                    <tr>
+                        <th>Action</th>
+                        <th>Fichier</th>
+                        <th>Consultations</th>
+                    </tr>
+                    </thead>
+                    <tbody id="lesDocuments"></tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</div>

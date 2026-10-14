@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use ClasseMetier\Classement;
 use ClasseMetier\Epreuve;
+use ClasseMetier\Information;
 use ClasseTechnique\Page;
 
 /** @noinspection PhpIncludeInspection */
@@ -12,4 +13,5 @@ require $_SERVER['DOCUMENT_ROOT'] . "/../bootstrap/bootstrap.php";
 // chagement des classements et de la prochaine épreuve
 $page = new Page();
 $page->setDonnee('laProchaineEpreuve', Epreuve::getProchaineEpreuve())
+    ->setDonnee('lesInformations', Information::getLesInformationsVisibles(isset($_SESSION['membre']), 5))
     ->afficher();

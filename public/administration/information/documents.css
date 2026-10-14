@@ -1,0 +1,23 @@
+.documents-admin-panel {
+    margin: 1rem;
+    padding: 1.25rem;
+    border: 1px solid #dbe8f6;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.documents-admin-panel h2 {
+    margin-bottom: 1rem;
+    color: #0a4f91;
+    font-size: 1.2rem;
+}
+
+.documents-admin-panel th:first-child,
+.documents-admin-panel td:first-child {
+    width: 7rem;
+}
+
+.document-supprimer {
+    color: #dc3545;
+    font-size: 1.1rem;
+}

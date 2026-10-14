@@ -40,6 +40,7 @@ define('DOSSIER_CONFIG', DOSSIER_RACINE . DIRECTORY_SEPARATOR . 'config');
 // constantes.php pour les dossiers comprenant des resources externes
 const DOSSIER_PHOTO_MEMBRE = DOSSIER_WWW . '/data/photomembre';
 const DOSSIER_PHOTO_INFORMATION = DOSSIER_WWW . '/data/photoinformation';
+const DOSSIER_DOCUMENT_INFORMATION = DOSSIER_WWW . '/data/documentinformation';
 
 // ==========================================================
 // Chargement automatique des classes
@@ -77,4 +78,3 @@ try {
 
 // Vérification globale de l'accès
 ControleAcces::verifier();
-

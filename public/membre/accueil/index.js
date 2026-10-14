@@ -6,6 +6,7 @@
 import { ucWord } from "/composant/fonction/chaine.js";
 
 import {getData} from "/composant/fonction/page.js";
+import {afficherLesInformations} from "/information/afficher.js";
 
 // -----------------------------------------------------------------------------------
 // Déclaration des variables globales
@@ -16,6 +17,7 @@ const divFonction = document.getElementById("divFonction");
 const mesFonctions = document.getElementById("mesFonctions");
 
 const lesFonctions = getData("lesFonctions");
+const lesInformations = getData("lesInformations");
 
 
 
@@ -57,5 +59,4 @@ if (lesFonctions && lesFonctions.length > 0) {
     mesFonctions.style.display = "none";
 }
 
-
-
+afficherLesInformations(divInformation, lesInformations);

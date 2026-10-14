@@ -1,0 +1,79 @@
+<div class="page-card">
+    <header class="page-header">
+        <div class="page-header-top">
+            <h1 class="page-title">Gestion des informations</h1>
+            <div class="page-header-actions">
+                <a class="btn btn-outline-secondary" href="/administration/photoinformation/">Bibliothèque d’images</a>
+                <button id="btnNouvelleInformation" type="button" class="btn btn-danger">Nouvelle information</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-body">
+        <menu></menu>
+        <div id="msg" role="status"></div>
+
+        <section class="information-admin-panel">
+            <h2>Informations publiées</h2>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Visibilité</th>
+                        <th>Expiration</th>
+                        <th>PDF associés</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="lesLignesInformation"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="information-admin-panel">
+            <h2 id="titreFormulaire">Ajouter une information</h2>
+            <form id="formInformation" class="information-form">
+                <input type="hidden" id="idInformation" value="0">
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-8">
+                        <label for="titre" class="form-label">Titre</label>
+                        <input id="titre" class="form-control" type="text" required maxlength="150">
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-2">
+                        <label for="type" class="form-label">Visibilité</label>
+                        <select id="type" class="form-select" required>
+                            <option value="publique">Publique</option>
+                            <option value="privée">Privée (membres)</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-2">
+                        <label for="dateExpiration" class="form-label">À supprimer le</label>
+                        <input id="dateExpiration" class="form-control" type="date" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="illustration" class="form-label">Image ou logo</label>
+                        <div class="information-illustration-editor">
+                            <img id="illustrationApercu" class="information-illustration-editor__preview" alt="Aperçu de l’image sélectionnée" hidden>
+                            <select id="illustration" class="form-select">
+                                <option value="">Aucune image (logo par défaut)</option>
+                            </select>
+                        </div>
+                        <div class="form-text">Choisissez une image de la bibliothèque. Vous pouvez en téléverser une depuis la page Bibliothèque d’images.</div>
+                    </div>
+                    <div class="col-12">
+                        <label for="description" class="form-label">Contenu</label>
+                        <textarea id="description"></textarea>
+                        <div class="form-text">Le contenu peut inclure des liens et des images de la photothèque.</div>
+                    </div>
+                    <div class="col-12 d-flex flex-wrap gap-2">
+                        <button type="submit" class="btn btn-danger">Enregistrer et joindre des PDF</button>
+                        <button id="btnAnnulerModification" type="button" class="btn btn-outline-secondary">Annuler</button>
+                    </div>
+                    <div class="col-12 form-text">Après l’enregistrement, vous pourrez ajouter un ou plusieurs PDF à cette information.</div>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

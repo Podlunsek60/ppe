@@ -1,3 +1,5 @@
+-- ATTENTION : ce script supprime puis recrée toute la base ppe.
+-- À réserver à une première installation ; pour une mise à jour, lancer seulement les scripts du module concerné.
 SET default_storage_engine=InnoDb;
 --
 
@@ -15,8 +17,7 @@ create database ppe
 -- 2. répertoire epreuve
 -- 3. répertoire  fonction
 -- 4. répertoire membre
--- 5. répertoire admministrateur
+-- 5. répertoire administrateur
 -- 6. répertoire droit
--- 7. répertoire resultat (un seul scriptresultat.slq pour les 3 tables)
-
-
+-- 7. répertoire information (create.sql puis insert.sql ; update.sql seulement pour une base existante à migrer)
+-- 8. répertoire resultat (un seul script resultat.sql pour les 3 tables)
