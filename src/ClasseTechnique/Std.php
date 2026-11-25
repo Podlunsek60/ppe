@@ -45,6 +45,20 @@ class Std
             $config->set('HTML.Nofollow', true);
             $config->set('HTML.TargetBlank', true); // Sécurise target="_blank"
             $config->set('Attr.DefaultImageAlt', ''); // Évite de supprimer les <img> sans alt
+            $config->set('CSS.AllowedProperties', [
+                'float',
+                'clear',
+                'width',
+                'height',
+                'max-width',
+                'margin',
+                'margin-top',
+                'margin-right',
+                'margin-bottom',
+                'margin-left',
+                'text-align',
+                'display',
+            ]);
 
             self::$purifier = new HTMLPurifier($config);
         }

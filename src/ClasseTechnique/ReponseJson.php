@@ -78,6 +78,10 @@ final class ReponseJson
      */
     public static function envoyer(mixed $contenu = null, int $codeHttp = 200): never
     {
+        while (ob_get_level() > 0) {
+            ob_end_clean();
+        }
+
         http_response_code($codeHttp);
         header('Content-Type: application/json; charset=utf-8');
         echo self::encoder($contenu);

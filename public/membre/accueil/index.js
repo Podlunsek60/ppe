@@ -59,4 +59,4 @@ if (lesFonctions && lesFonctions.length > 0) {
     mesFonctions.style.display = "none";
 }
 
-afficherLesInformations(divInformation, lesInformations);
+afficherLesInformations(divInformation, lesInformations, false, true);

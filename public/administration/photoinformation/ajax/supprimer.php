@@ -1,27 +1,25 @@
 <?php
 declare(strict_types=1);
 
+use ClasseMetier\Information;
 use ClasseTechnique\FileManager;
 use ClasseTechnique\ReponseJson;
 use ClasseTechnique\Requete;
+use ClasseTechnique\UserException;
 
-// Chargement automatique des classes
 require $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap/bootstrap.php';
 
-// Vérification d'un appel AJAX par la méthode POST sécurisé par un jeton
 Requete::exigerPost();
-
-
-// Récupération contrôlée des données transmises
+Information::verifierDroitPhototheque();
 $nomFichier = Requete::postString('nomFichier');
 
-// création d'un objet FileManager pour gérer les fichiers PDF
-$fileManager = new FileManager(DOSSIER_PHOTO_INFORMATION);
-
-// Suppression du fichier
-if (!$fileManager->supprimer($nomFichier)) {
-    ReponseJson::envoyerLesErreurs(['global' => ['Le fichier n\'a pas pu être supprimé.']]);
+if (Information::illustrationEstUtilisee($nomFichier)) {
+    throw new UserException('Cette image est utilisée par une information et ne peut pas être supprimée.');
 }
 
-// Retour des données actualisées
+$fileManager = new FileManager(DOSSIER_PHOTO_INFORMATION);
+if (!$fileManager->supprimer($nomFichier)) {
+    throw new UserException('Le fichier image n’a pas pu être supprimé.');
+}
+
 ReponseJson::envoyerLesDonnees($fileManager->getLesFichiers());

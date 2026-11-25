@@ -19,5 +19,5 @@ create database ppe
 -- 4. répertoire membre
 -- 5. répertoire administrateur
 -- 6. répertoire droit
--- 7. répertoire information (create.sql puis insert.sql ; update.sql seulement pour une base existante à migrer)
+-- 7. répertoire information (create.sql puis insert.sql ; permission.sql pour accorder le droit à l'administrateur initial ; update.sql seulement pour une base existante à migrer)
 -- 8. répertoire resultat (un seul script resultat.sql pour les 3 tables)

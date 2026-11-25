@@ -52,8 +52,10 @@ class ImageManager extends FileManager
 
         $nouveauNom = $this->preparerNom($nouveauNom);
         $destination = $this->repertoire . DIRECTORY_SEPARATOR . $nouveauNom;
+        $niveauErreur = error_reporting();
 
         try {
+            error_reporting($niveauErreur & ~E_DEPRECATED);
             $image = new ImageResize($file->getTmpName());
 
             if ($this->maxWidth > 0 && $this->maxHeight === 0) {
@@ -75,6 +77,8 @@ class ImageManager extends FileManager
             throw new UserException("Erreur lors du redimensionnement de l'image : " . $e->getMessage());
         } catch (\Throwable $e) {
             throw new UserException("Impossible de sauvegarder l'image sur le disque.");
+        } finally {
+            error_reporting($niveauErreur);
         }
     }
 }

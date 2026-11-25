@@ -3,7 +3,7 @@
         <div class="page-header-top">
             <h1 class="page-title">Gestion des informations</h1>
             <div class="page-header-actions">
-                <a class="btn btn-outline-secondary" href="/administration/photoinformation/">Bibliothèque d’images</a>
+                <a class="btn btn-primary information-library-button" href="/administration/photoinformation/" target="_blank" rel="noopener">Gérer les images par défaut</a>
                 <button id="btnNouvelleInformation" type="button" class="btn btn-danger">Nouvelle information</button>
             </div>
         </div>
@@ -31,47 +31,147 @@
             </div>
         </section>
 
-        <section class="information-admin-panel">
+        <section class="information-admin-panel information-admin-panel--editor">
+            <div class="information-form__mode" id="modeFormulaire">
+                <span class="information-form__mode-badge" id="badgeModeInformation">Création</span>
+            </div>
             <h2 id="titreFormulaire">Ajouter une information</h2>
+            <p class="information-form__lead" id="leadFormulaire">Complétez les informations essentielles, personnalisez l’illustration et joignez vos fichiers avant de publier.</p>
             <form id="formInformation" class="information-form">
                 <input type="hidden" id="idInformation" value="0">
 
-                <div class="row g-3">
-                    <div class="col-12 col-lg-8">
-                        <label for="titre" class="form-label">Titre</label>
-                        <input id="titre" class="form-control" type="text" required maxlength="150">
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2">
-                        <label for="type" class="form-label">Visibilité</label>
-                        <select id="type" class="form-select" required>
-                            <option value="publique">Publique</option>
-                            <option value="privée">Privée (membres)</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-md-6 col-lg-2">
-                        <label for="dateExpiration" class="form-label">À supprimer le</label>
-                        <input id="dateExpiration" class="form-control" type="date" required>
-                    </div>
-                    <div class="col-12">
-                        <label for="illustration" class="form-label">Image ou logo</label>
-                        <div class="information-illustration-editor">
-                            <img id="illustrationApercu" class="information-illustration-editor__preview" alt="Aperçu de l’image sélectionnée" hidden>
-                            <select id="illustration" class="form-select">
-                                <option value="">Aucune image (logo par défaut)</option>
-                            </select>
+                <ol class="information-form__steps" aria-label="Étapes de création">
+                    <li class="information-form__step-item information-form__step-item--active" data-etape="1">
+                        <span>1</span>
+                        <strong>Essentiel</strong>
+                    </li>
+                    <li class="information-form__step-item" data-etape="2">
+                        <span>2</span>
+                        <strong>Sujet</strong>
+                    </li>
+                    <li class="information-form__step-item" data-etape="3">
+                        <span>3</span>
+                        <strong>Facultatif</strong>
+                    </li>
+                </ol>
+
+                <div class="information-form__step-content" data-etape="1">
+                        <section class="information-form__basics" aria-labelledby="titreEssentiels">
+                            <div class="information-form__section-heading">
+                                <span class="information-form__step" aria-hidden="true">1</span>
+                                <div>
+                                    <h3 id="titreEssentiels">Les essentiels</h3>
+                                    <p>Donnez un titre à votre publication et définissez qui peut la consulter.</p>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-12 col-lg-7">
+                                    <label for="titre" class="form-label">Titre <span class="information-form__required">Obligatoire</span></label>
+                                    <input id="titre" class="form-control information-form__title-input" type="text" placeholder="Ex. Informations sur la rentrée" required maxlength="150">
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="type" class="form-label">Qui peut voir cette information ?</label>
+                                    <select id="type" class="form-select" required>
+                                        <option value="publique">Tout le monde</option>
+                                        <option value="privée">Membres connectés uniquement</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-2">
+                                    <label for="dateExpiration" class="form-label">Date de fin</label>
+                                    <input id="dateExpiration" class="form-control" type="date" required>
+                                    <div class="form-text">Fin de publication</div>
+                                </div>
+                            </div>
+                        </section>
+                </div>
+
+                <div class="information-form__step-content" data-etape="2" hidden>
+                    <section class="information-form__content">
+                        <div class="information-form__content-heading">
+                            <div>
+                                <span class="information-form__eyebrow"><span class="information-form__step information-form__step--small" aria-hidden="true">2</span> Rédaction</span>
+                                <label for="description" class="form-label">Sujet et contenu</label>
+                            </div>
+                            <span class="information-form__optional">Obligatoire</span>
                         </div>
-                        <div class="form-text">Choisissez une image de la bibliothèque. Vous pouvez en téléverser une depuis la page Bibliothèque d’images.</div>
-                    </div>
-                    <div class="col-12">
-                        <label for="description" class="form-label">Contenu</label>
                         <textarea id="description"></textarea>
-                        <div class="form-text">Le contenu peut inclure des liens et des images de la photothèque.</div>
+                        <div class="information-form__inline-image-option">
+                            <input id="ajouterImageBibliotheque" class="form-check-input" type="checkbox">
+                            <label for="ajouterImageBibliotheque" class="form-check-label">
+                                Ajouter les images insérées au texte à la bibliothèque
+                            </label>
+                        </div>
+                        <div class="form-text">Rédigez le message complet. Utilisez la barre d’outils pour ajouter des liens, des listes ou des images au milieu du texte.</div>
+                    </section>
+                </div>
+
+                <div class="information-form__step-content" data-etape="3" hidden>
+                    <div class="information-form__preview-heading">
+                        <div>
+                            <span class="information-form__eyebrow">Prévisualisation</span>
+                            <h3>Aperçu avant publication</h3>
+                        </div>
+                        <span class="information-form__optional">Mise à jour en direct</span>
                     </div>
-                    <div class="col-12 d-flex flex-wrap gap-2">
-                        <button type="submit" class="btn btn-danger">Enregistrer et joindre des PDF</button>
+                    <article id="apercuInformation" class="information-form__preview"></article>
+                    <div class="row g-4">
+                    <div class="col-12 col-lg-6">
+                        <section class="information-form__asset-section" aria-labelledby="titreIllustration">
+                            <div class="information-form__asset-heading">
+                                <div>
+                                    <span class="information-form__eyebrow"><span class="information-form__step information-form__step--small" aria-hidden="true">3</span> Identité visuelle</span>
+                                    <h3 id="titreIllustration">Image ou logo</h3>
+                                </div>
+                                <span class="information-form__optional">Facultatif</span>
+                            </div>
+                            <label for="illustration" class="form-label">Choisir une illustration</label>
+                            <div class="information-illustration-editor">
+                                <img id="illustrationApercu" class="information-illustration-editor__preview" alt="Aperçu de l’image sélectionnée" hidden>
+                                <div id="illustrationApercuVide" class="information-illustration-editor__empty" aria-hidden="true">
+                                    <span>Visuel</span>
+                                </div>
+                                <div class="information-illustration-editor__controls">
+                                    <select id="illustration" class="form-select">
+                                        <option value="">Aucune image (logo par défaut)</option>
+                                    </select>
+                                    <div class="information-illustration-editor__upload">
+                                        <input id="illustrationFichier" class="form-control" type="file" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" aria-label="Choisir une image à téléverser">
+                                        <button id="btnTeleverserIllustration" type="button" class="btn btn-outline-primary">
+                                            Téléverser et utiliser l’image
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-text">Choisissez une image existante ou ajoutez-en une (JPG, PNG ou GIF, 300 Ko max.).</div>
+                            <a class="information-form__library-link" href="/administration/photoinformation/" target="_blank" rel="noopener">Ajouter des images réutilisables à la bibliothèque</a>
+                        </section>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <section class="information-form__asset-section" aria-labelledby="titrePdf">
+                            <div class="information-form__asset-heading">
+                                <div>
+                                    <span class="information-form__eyebrow"><span class="information-form__step information-form__step--small" aria-hidden="true">3</span> Pièces jointes</span>
+                                    <h3 id="titrePdf">Documents PDF</h3>
+                                </div>
+                                <span class="information-form__optional">Facultatif</span>
+                            </div>
+                            <label for="fichiersPdf" class="form-label">Ajouter des documents</label>
+                            <input id="fichiersPdf" class="form-control information-form__pdf-input" type="file" accept="application/pdf,.pdf" multiple>
+                            <div class="form-text">Un ou plusieurs PDF, 20 Mo maximum par fichier. Ils seront joints à la publication après son enregistrement.</div>
+                            <ul id="listeFichiersPdf" class="information-form__file-list" aria-live="polite"></ul>
+                        </section>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="information-form__actions">
+                    <div class="form-text">Étape <span id="numeroEtape">1</span> sur 3</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button id="btnEtapePrecedente" type="button" class="btn btn-outline-secondary" hidden>Étape précédente</button>
+                        <button id="btnEtapeSuivante" type="button" class="btn btn-primary">Étape suivante</button>
+                        <button id="btnEnregistrerInformation" type="submit" class="btn btn-danger" hidden>Enregistrer l’information</button>
                         <button id="btnAnnulerModification" type="button" class="btn btn-outline-secondary">Annuler</button>
                     </div>
-                    <div class="col-12 form-text">Après l’enregistrement, vous pourrez ajouter un ou plusieurs PDF à cette information.</div>
                 </div>
             </form>
         </section>

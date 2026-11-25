@@ -29,7 +29,11 @@ const maxHeight = lesParametres.maxHeight;
 const cible = document.getElementById('cible');
 const fichier = document.getElementById('fichier');
 const lesCartes = document.getElementById('lesCartes');
+const nombreImages = document.getElementById('nombreImages');
 const tplCartePhoto = document.getElementById('tplCartePhoto');
+const canalImages = 'BroadcastChannel' in window
+    ? new BroadcastChannel('photoinformation-images')
+    : null;
 
 // -----------------------------------------------------------------------------------
 // Procédures évènementielles
@@ -77,6 +81,16 @@ function afficher(data) {
     }
     // Vide l'élément 'lesCartes' et y insère le fragment en une seule opération
     lesCartes.replaceChildren(fragment);
+    nombreImages.textContent = `${data.length} image${data.length === 1 ? '' : 's'}`;
+}
+
+function notifierFenetreInformation(data) {
+    if (canalImages) {
+        canalImages.postMessage({
+            type: 'photoinformation:images-modifiees',
+            fichiers: data
+        });
+    }
 }
 
 /**
@@ -142,6 +156,7 @@ function ajouter(file) {
         success: (data) => {
             afficherToast("La photo a été ajoutée dans la bibliothèque");
             afficher(data);
+            notifierFenetreInformation(data);
         }
     });
 }
@@ -161,6 +176,7 @@ function supprimer(nomFichier) {
         success: (data) => {
             afficherToast("La photo a été supprimée de la bibliothèque");
             afficher(data);
+            notifierFenetreInformation(data);
         }
     });
 }

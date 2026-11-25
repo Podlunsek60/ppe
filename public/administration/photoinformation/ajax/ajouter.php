@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use ClasseMetier\Information;
 use ClasseTechnique\Config;
 use ClasseTechnique\ImageManager;
 use ClasseTechnique\InputFileImg;
@@ -8,38 +9,28 @@ use ClasseTechnique\ReponseJson;
 use ClasseTechnique\Requete;
 use ClasseTechnique\UserException;
 
-// Chargement automatique des classes et des constantes (DOSSIER_IMAGE)
 require $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap/bootstrap.php';
 
-// 1. Vérification d'un appel AJAX par la méthode POST
 Requete::exigerPost();
-
-// 2. Récupération du fichier téléversé
+Information::verifierDroitPhototheque();
 $fichier = Requete::getFile('fichier');
-
-if (!$fichier) {
-    throw new UserException("Aucun fichier n'a été transmis.");
-}
-
-// 3. Chargement de la configuration pour les images
 $lesParametres = Config::chargerPhp('image');
-
-// 4. Instanciation et validation du fichier
 $inputFileImg = new InputFileImg($fichier, $lesParametres);
-
 if (!$inputFileImg->checkValidity()) {
-    $message = $inputFileImg->getValidationMessage() ?: "Le fichier image n'est pas valide.";
-    throw new UserException($message);
+    throw new UserException($inputFileImg->getValidationMessage() ?: "Le fichier image n'est pas valide.");
 }
 
-// 5. Instanciation de l'ImageManager avec le répertoire et la configuration
+if (!is_dir(DOSSIER_PHOTO_INFORMATION)
+    && !mkdir(DOSSIER_PHOTO_INFORMATION, 0750, true)
+    && !is_dir(DOSSIER_PHOTO_INFORMATION)) {
+    throw new UserException('Le dossier de stockage des images ne peut pas être créé.');
+}
+if (!is_writable(DOSSIER_PHOTO_INFORMATION)) {
+    throw new UserException('Le dossier de stockage des images n’est pas accessible en écriture.');
+}
+
 $imageManager = new ImageManager(DOSSIER_PHOTO_INFORMATION, $lesParametres);
-
-// 6. Génération d'un nom de fichier unique
 $nomUnique = $imageManager->genererNomUnique($inputFileImg->getValue());
-
-// 7. Enregistrement du fichier (ImageManager gère le redimensionnement en interne)
 $imageManager->copierImage($inputFileImg, $nomUnique);
 
-// 8. Envoi de la liste à jour des fichiers images
 ReponseJson::envoyerLesDonnees($imageManager->getLesFichiers());

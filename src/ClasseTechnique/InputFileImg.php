@@ -21,6 +21,9 @@ class InputFileImg extends InputFile
     // Hauteur maximale autorisée.
     protected int $maxHeight = 0;
 
+    // Nombre maximal de pixels de l'image source.
+    protected int $maxPixels = 0;
+
     // L'image doit-elle être redimensionnée.
     protected bool $resized = false;
 
@@ -39,6 +42,10 @@ class InputFileImg extends InputFile
 
         if (isset($lesParametres['maxHeight'])) {
             $this->maxHeight = (int)$lesParametres['maxHeight'];
+        }
+
+        if (isset($lesParametres['maxPixels'])) {
+            $this->maxPixels = max(0, (int)$lesParametres['maxPixels']);
         }
 
         if (isset($lesParametres['resized'])) {
@@ -85,23 +92,23 @@ class InputFileImg extends InputFile
      */
     protected function validationSpecifique(): bool
     {
-        // Si l'image doit être redimensionnée, on ne fait pas de vérification de taille.
-        if ($this->resized) {
-            return true;
-        }
-
-        // Récupération des dimensions de l'image.
         $infos = getimagesize($this->getTmpName());
-
-        // Vérification que le fichier est bien une image.
         if ($infos === false) {
             $this->validationMessage = "Le fichier n'est pas une image valide.";
             return false;
         }
 
-        // Vérification des dimensions de l'image.
         $largeur = $infos[0];
         $hauteur = $infos[1];
+
+        if ($this->maxPixels > 0 && $largeur > intdiv($this->maxPixels, max(1, $hauteur))) {
+            $this->validationMessage = 'Les dimensions de l’image dépassent la limite autorisée.';
+            return false;
+        }
+
+        if ($this->resized) {
+            return true;
+        }
 
         // Vérification de la largeur maximale.
         if ($this->maxWidth > 0 && $largeur > $this->maxWidth) {

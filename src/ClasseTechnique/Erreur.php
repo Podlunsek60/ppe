@@ -94,6 +94,43 @@ class Erreur
         set_exception_handler(static function (Throwable $e): void {
             self::traiterReponse($e);
         });
+
+        register_shutdown_function(static function (): void {
+            $erreur = error_get_last();
+            if ($erreur === null) {
+                return;
+            }
+
+            $typesFatales = E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR;
+            if (($erreur['type'] & $typesFatales) === 0) {
+                return;
+            }
+
+            $detail = sprintf(
+                '[Erreur fatale PHP] %s | fichier : %s | ligne : %d',
+                $erreur['message'],
+                $erreur['file'],
+                $erreur['line']
+            );
+            Journal::enregistrer($detail, 'erreur');
+
+            while (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+            if (self::getTypeReponse() === TypeReponse::JSON) {
+                ReponseJson::envoyerErreur(
+                    'Une erreur technique est survenue, veuillez réessayer ultérieurement.',
+                    500
+                );
+            }
+
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $_SESSION['erreur'] = 'Une erreur technique est survenue, veuillez réessayer ultérieurement.';
+            header('Location: /erreur');
+            exit;
+        });
     }
 
     /**

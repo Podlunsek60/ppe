@@ -8,19 +8,20 @@ use ClasseTechnique\Page;
 /** @noinspection PhpIncludeInspection */
 require $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap/bootstrap.php';
 
+$lesNomsImages = Std::getLesFichiers(DOSSIER_PHOTO_INFORMATION, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif']);
 $lesPhotos = array_map(
     static fn(string $photo): array => [
         'title' => $photo,
         'value' => '/data/photoinformation/' . rawurlencode($photo),
     ],
-    Std::getLesFichiers(DOSSIER_PHOTO_INFORMATION, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'])
+    $lesNomsImages
 );
 $lesIllustrations = array_map(
     static fn(string $photo): array => [
         'nom' => $photo,
         'url' => '/data/photoinformation/' . rawurlencode($photo),
     ],
-    Std::getLesFichiers(DOSSIER_PHOTO_INFORMATION, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif'])
+    $lesNomsImages
 );
 
 $page = new Page();

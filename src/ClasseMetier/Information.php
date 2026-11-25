@@ -23,6 +23,32 @@ final class Information
         }
     }
 
+    public static function verifierDroitPhototheque(): void
+    {
+        $idMembre = $_SESSION['membre']['id'] ?? null;
+        if ($idMembre === null || !Administrateur::peutAdministrer((int)$idMembre, 'photoinformation')) {
+            throw new UserException("Vous n'êtes pas autorisé à gérer la photothèque.");
+        }
+    }
+
+    public static function illustrationEstUtilisee(string $nomIllustration): bool
+    {
+        $curseur = Database::getInstance()->prepare(
+            <<<'SQL'
+                SELECT 1
+                FROM information
+                WHERE illustration = :illustration
+                   OR LOCATE(:urlIllustration, description) > 0
+                LIMIT 1
+SQL
+        );
+        $curseur->execute([
+            'illustration' => $nomIllustration,
+            'urlIllustration' => '/data/photoinformation/' . rawurlencode($nomIllustration),
+        ]);
+        return (bool)$curseur->fetchColumn();
+    }
+
     /** @return list<array<string, mixed>> */
     public static function getAllAdmin(): array
     {
@@ -41,19 +67,16 @@ SQL;
     {
         self::supprimerLesObsoletes();
         $limite = max(1, min($limite, 100));
-        $conditionType = $membreConnecte
-            ? "type IN ('publique', 'privée')"
-            : "type = 'publique'";
-
         $sql = <<<SQL
             SELECT idInformation, titre, description, illustration, type, datePublication, dateExpiration
             FROM information
             WHERE dateExpiration >= CURDATE()
-              AND $conditionType
+              AND (:membreConnecte = 1 OR type = 'publique')
             ORDER BY datePublication DESC, idInformation DESC
             LIMIT :limite
 SQL;
         $curseur = Database::getInstance()->prepare($sql);
+        $curseur->bindValue('membreConnecte', $membreConnecte, PDO::PARAM_BOOL);
         $curseur->bindValue('limite', $limite, PDO::PARAM_INT);
         $curseur->execute();
         return self::ajouterLesDocuments($curseur->fetchAll());
@@ -214,20 +237,19 @@ SQL;
     public static function obtenirDocumentVisible(int $idDocument, bool $membreConnecte): ?array
     {
         self::supprimerLesObsoletes();
-        $conditionType = $membreConnecte
-            ? "i.type IN ('publique', 'privée')"
-            : "i.type = 'publique'";
         $sql = <<<SQL
             SELECT d.idDocument, d.nomDocument, d.nomStocke, i.type
             FROM documentinformation d
             JOIN information i ON i.idInformation = d.idInformation
             WHERE d.idDocument = :idDocument
               AND i.dateExpiration >= CURDATE()
-              AND $conditionType
+              AND (:membreConnecte = 1 OR i.type = 'publique')
 SQL;
         $db = Database::getInstance();
         $curseur = $db->prepare($sql);
-        $curseur->execute(['idDocument' => $idDocument]);
+        $curseur->bindValue('idDocument', $idDocument, PDO::PARAM_INT);
+        $curseur->bindValue('membreConnecte', $membreConnecte, PDO::PARAM_BOOL);
+        $curseur->execute();
         $document = $curseur->fetch();
         if (!$document) {
             return null;

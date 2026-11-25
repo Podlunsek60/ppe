@@ -9,6 +9,7 @@ return [
     // Dimensions maximales
     'maxWidth' => 350,
     'maxHeight' => 0,
+    'maxPixels' => 12000000,
 
     // L'image doit-elle être redimensionnée si elle dépasse la largeur ou la hauteur maximale.
     'resized' => true,

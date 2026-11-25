@@ -42,8 +42,7 @@ if (laProchaineEpreuve?.date) {
 
 
 initialiserToutesLesCartes();
-afficherLesInformations(document.getElementById("informations-recentes"), lesInformations, false);
-
+afficherLesInformations(document.getElementById("informations-recentes"), lesInformations, false, true);
 
 
 

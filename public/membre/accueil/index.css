@@ -1,3 +1,5 @@
+@import url("/information/index.css");
+
 /* ====== Sécurité du conteneur parent ====== */
 #divFonction {
     max-width: 100%;
@@ -59,97 +61,37 @@
     border-radius: 4px;
 }
 
+.member-card__content.information-list {
+    width: auto;
+    margin: 0;
+    padding: 0.75rem;
+}
+
+.member-card__content .information-card {
+    padding: 1rem;
+}
+
+.member-card__content .information-card__heading-text {
+    min-width: 0;
+}
+
+.member-card__content .information-card__title {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: normal;
+    word-break: normal;
+}
+
+.member-card__content .information-card__read {
+    display: none;
+}
+
 /* ====== Adaptation grands écrans (Tablettes / PC) ====== */
 @media (min-width: 768px) {
     .admin-fonctions-list {
         flex-wrap: wrap; /* Les boutons passent à la ligne s'il n'y a plus de place */
         justify-content: flex-start;
         overflow-x: visible; /* Désactive le défilement horizontal inutile sur PC */
-    }
-
-    .information-list {
-        display: grid;
-        gap: 0.65rem;
-    }
-
-    .information-card {
-        padding: 0.75rem;
-        border: 1px solid #dbe8f6;
-        border-radius: 8px;
-        background: #fff;
-    }
-
-    .information-card__heading {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 0.35rem 0.75rem;
-    }
-
-    .information-card__logo {
-        display: inline-flex;
-        width: 2.75rem;
-        height: 2.75rem;
-        flex: 0 0 2.75rem;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        border: 1px solid #dbe8f6;
-        border-radius: 0.7rem;
-        background: #eef7ff;
-    }
-
-    .information-card__logo-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .information-card__logo--fallback {
-        color: #075b9a;
-        font-size: 1.25rem;
-    }
-
-    .information-card__title {
-        margin: 0;
-        color: #0a4f91;
-        font-size: 1rem;
-        font-weight: 700;
-    }
-
-    .information-card__meta,
-    .information-card__type {
-        color: #52677d;
-        font-size: 0.8rem;
-    }
-
-    .information-card__type {
-        padding: 0.1rem 0.45rem;
-        border-radius: 999px;
-        background: #e6f4ff;
-        color: #075b9a;
-    }
-
-    .information-card__type--private {
-        background: #fff3cd;
-        color: #765500;
-    }
-
-    .information-card__content img {
-        max-width: 100%;
-        height: auto;
-    }
-
-    .information-card__documents {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-top: 0.5rem;
-    }
-
-    .information-card__document {
-        color: #075b9a;
     }
 
     .home-news__all {

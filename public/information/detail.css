@@ -1,0 +1,172 @@
+.information-detail-page {
+    max-width: 82rem;
+    margin-inline: auto;
+}
+
+.information-detail__back {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0.45rem 0.8rem;
+    border: 1px solid #c6d9e9;
+    border-radius: 999px;
+    background: #f4f8fc;
+    color: #075b9a;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.information-detail__back:hover,
+.information-detail__back:focus-visible {
+    border-color: #8eb2d1;
+    background: #eaf4fc;
+    text-decoration: none;
+}
+
+.information-detail {
+    position: relative;
+    overflow: hidden;
+    width: calc(100% - clamp(1.5rem, 6vw, 5rem));
+    max-width: 72rem;
+    min-height: 32rem;
+    margin: clamp(1.25rem, 3vw, 2.25rem) auto;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid #dce8f3;
+    border-left: 4px solid #1769aa;
+    border-radius: 0.9rem;
+    background:
+        radial-gradient(circle at 92% 3%, rgba(62, 153, 214, 0.08), transparent 18rem),
+        linear-gradient(145deg, #fff 0%, #fbfdff 100%);
+    box-shadow: 0 0.8rem 2rem rgba(13, 35, 102, 0.10);
+}
+
+.information-detail__header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin: calc(clamp(1.5rem, 4vw, 3rem) * -1);
+    margin-bottom: 1.75rem;
+    padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.25rem, 4vw, 2.5rem);
+    border-bottom: 1px solid #dbe8f3;
+    background: linear-gradient(135deg, rgba(239, 247, 254, 0.95), rgba(255, 255, 255, 0.82));
+}
+
+.information-detail__logo {
+    display: grid;
+    width: 5.25rem;
+    height: 5.25rem;
+    flex: 0 0 5.25rem;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid #cbdfee;
+    border-radius: 1.1rem;
+    background: #fff;
+    box-shadow: 0 0.45rem 1.1rem rgba(13, 79, 145, 0.12);
+    font-size: 2.25rem;
+}
+
+.information-detail__logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.information-detail__heading {
+    min-width: 0;
+}
+
+.information-detail__heading h1 {
+    margin: 0 0 0.35rem;
+    color: #0a4f91;
+    font-size: clamp(1.75rem, 4vw, 2.65rem);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+}
+
+.information-detail__meta {
+    display: inline-flex;
+    padding: 0.25rem 0.6rem;
+    border: 1px solid #d8e6f2;
+    border-radius: 999px;
+    background: #fff;
+    color: #65788b;
+    font-size: 0.88rem;
+}
+
+.information-detail__content {
+    max-width: 64rem;
+    margin-inline: auto;
+    color: #31485a;
+    font-size: clamp(1.05rem, 1.5vw, 1.16rem);
+    line-height: 1.82;
+}
+
+.information-detail__content h2,
+.information-detail__content h3 {
+    color: #123b62;
+}
+
+.information-detail__content blockquote {
+    margin: 1.25rem 0;
+    padding: 0.9rem 1.1rem;
+    border-left: 4px solid #8bbbe1;
+    border-radius: 0 0.55rem 0.55rem 0;
+    background: #f4f8fc;
+}
+
+.information-detail__documents {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.35rem;
+    border-top: 1px solid #e4edf5;
+}
+
+.information-detail__documents h2 {
+    width: 100%;
+    margin: 0 0 0.25rem;
+    color: #0a4f91;
+    font-size: 1.1rem;
+}
+
+.information-detail__documents .information-card__document {
+    min-height: 2.8rem;
+    box-shadow: 0 0.25rem 0.7rem rgba(13, 79, 145, 0.07);
+}
+
+.information-detail__documents .information-card__document:hover {
+    transform: translateY(-1px);
+    border-color: #8eb2d1;
+    background: #edf6fd;
+}
+
+@media (max-width: 540px) {
+    .information-detail {
+        width: calc(100% - 1rem);
+        min-height: 24rem;
+        margin: 0.75rem auto;
+        padding: 1rem;
+    }
+
+    .information-detail__header {
+        align-items: flex-start;
+        margin: -1rem -1rem 1.25rem;
+        padding: 1rem;
+    }
+
+    .information-detail__logo {
+        width: 3.75rem;
+        height: 3.75rem;
+        flex-basis: 3.75rem;
+    }
+
+    .information-detail__heading h1 {
+        font-size: 1.35rem;
+    }
+
+    .information-detail__content {
+        font-size: 1rem;
+    }
+}

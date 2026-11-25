@@ -15,7 +15,7 @@ $fileManager = new FileManager(DOSSIER_PHOTO_INFORMATION);
 // alimentation et affichage de l'interface
 $page = new Page();
 
-$page->setTitre("Téléversement d'une image")
+$page->setTitre("Images par défaut des actualités")
     ->setDonnee('lesFichiers',  $fileManager->getLesFichiers())
     ->setDonnee('lesParametres', Config::chargerPhp('image'))
     ->setDonnee('repertoire', substr(DOSSIER_PHOTO_INFORMATION, strlen(DOSSIER_WWW)))
