@@ -52,7 +52,6 @@ SQL
     /** @return list<array<string, mixed>> */
     public static function getAllAdmin(): array
     {
-        self::supprimerLesObsoletes();
         $sql = <<<'SQL'
             SELECT idInformation, titre, description, illustration, type, datePublication, dateExpiration
             FROM information
@@ -65,7 +64,6 @@ SQL;
     /** @return list<array<string, mixed>> */
     public static function getLesInformationsVisibles(bool $membreConnecte, int $limite = 50): array
     {
-        self::supprimerLesObsoletes();
         $limite = max(1, min($limite, 100));
         $sql = <<<SQL
             SELECT idInformation, titre, description, illustration, type, datePublication, dateExpiration
@@ -85,7 +83,6 @@ SQL;
     /** @return array<string, mixed>|null */
     public static function getParId(int $idInformation): ?array
     {
-        self::supprimerLesObsoletes();
         $sql = <<<'SQL'
             SELECT idInformation, titre, description, illustration, type, datePublication, dateExpiration
             FROM information
@@ -236,7 +233,6 @@ SQL;
     /** @return array<string, mixed>|null */
     public static function obtenirDocumentVisible(int $idDocument, bool $membreConnecte): ?array
     {
-        self::supprimerLesObsoletes();
         $sql = <<<SQL
             SELECT d.idDocument, d.nomDocument, d.nomStocke, i.type
             FROM documentinformation d
@@ -260,21 +256,6 @@ SQL;
         );
         $curseur->execute(['idDocument' => $idDocument]);
         return $document;
-    }
-
-    /** Supprime automatiquement le contenu expiré lors de la consultation du module. */
-    private static function supprimerLesObsoletes(): void
-    {
-        $db = Database::getInstance();
-        $sql = <<<'SQL'
-            SELECT d.nomStocke
-            FROM documentinformation d
-            JOIN information i ON i.idInformation = d.idInformation
-            WHERE i.dateExpiration < CURDATE()
-SQL;
-        $documents = $db->query($sql)->fetchAll();
-        $db->exec('DELETE FROM information WHERE dateExpiration < CURDATE()');
-        self::supprimerLesFichiers($documents);
     }
 
     /**

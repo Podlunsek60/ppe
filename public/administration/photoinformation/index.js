@@ -17,6 +17,7 @@ import {getData} from "/composant/fonction/page.js";
 const lesFichiers = getData('lesFichiers');
 const lesParametres = getData("lesParametres");
 const repertoire = getData('repertoire');
+
 // Extraction des paramètres issus de Config::chargerPhp('club')
 
 const lesExtensions = lesParametres.lesExtensions;

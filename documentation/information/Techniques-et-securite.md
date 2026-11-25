@@ -56,7 +56,7 @@ La bibliothèque des illustrations utilise le droit distinct `photoinformation`.
 
 `InputFileImg` vérifie les dimensions source avec `getimagesize`. La limite configurée de 12 mégapixels est testée avant le redimensionnement. La taille compressée du fichier ne borne pas la mémoire nécessaire au décodage d’une image très grande ; cette limite protège donc le serveur contre une consommation mémoire excessive.
 
-`ImageManager` effectue le redimensionnement à 350 pixels de large et stocke l’image transformée. L’image n’est utilisable comme illustration principale qu’après vérification de son nom et de sa présence dans le répertoire prévu.
+`ImageManager` effectue le redimensionnement à 350 pixels de large et stocke l’image transformée. L’illustration principale est placée dans `photoinformation/`. Les images du texte sont enregistrées dans `informationcontenu/`, sauf demande explicite d’ajout à la bibliothèque via la case du formulaire.
 
 ### PDF
 

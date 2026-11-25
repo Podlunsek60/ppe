@@ -4,9 +4,11 @@ tags:
   - documentation
 ---
 
-# Documentation du module Informations
+# Documentation technique du module Informations
 
-Documentation technique des actualités et informations publiées sur le site. Les images décrites ici sont les illustrations attachées à une information ; ce dossier ne documente pas le module général de photothèque.
+Ces notes couvrent uniquement les actualités et informations publiées sur le site. Les images décrites ici sont les illustrations et images insérées dans une information ; ce dossier ne documente pas les autres rubriques du site ni une photothèque générale.
+
+Pour commencer, consulter l’[index de la documentation](../Index.md), le [guide utilisateur](../utilisateur/Guide.md) ou le [guide technique général](../technique/Guide.md).
 
 ## Notes
 

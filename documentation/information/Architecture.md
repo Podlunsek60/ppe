@@ -16,7 +16,7 @@ Le module sépare les pages, les règles métier, la persistance SQL et les fich
 | Présentation | Transformer les objets d’information en éléments HTML et les mettre en forme | [`public/information/afficher.js`](../../public/information/afficher.js), [`public/information/index.css`](../../public/information/index.css) |
 | Administration | Afficher le formulaire, envoyer les actions AJAX et gérer les pièces jointes | [`public/administration/information/`](../../public/administration/information/) |
 | Métier et données | Contrôler les valeurs, appliquer la visibilité, écrire et lire en base | [`src/ClasseMetier/Information.php`](../../src/ClasseMetier/Information.php) |
-| Stockage | Conserver les illustrations et les PDF séparément de leurs métadonnées | `public/data/photoinformation/`, `public/data/documentinformation/` |
+| Stockage | Conserver les illustrations, images du texte et PDF séparément de leurs métadonnées | `public/data/photoinformation/`, `public/data/informationcontenu/`, `public/data/documentinformation/` |
 | Schéma SQL | Définir les informations, documents et contraintes relationnelles | [`sql/information/create.sql`](../../sql/information/create.sql) |
 
 `Information` est le point commun des pages publiques et administratives : il évite de dupliquer les règles de visibilité et les opérations SQL dans les contrôleurs.
@@ -49,7 +49,7 @@ flowchart TD
     F --> G[Joindre les PDF facultatifs]
 ```
 
-La création ou la modification de l’information est une opération distincte de l’ajout de PDF. L’interface enregistre l’information, puis ouvre son écran de documents. Une image peut être téléversée avant l’enregistrement ; le nom de fichier sélectionné est ensuite stocké avec l’information.
+La création ou la modification de l’information est une opération distincte de l’ajout de PDF. L’interface enregistre l’information, puis ouvre son écran de documents. L’illustration principale est stockée dans la bibliothèque ; les images téléversées depuis l’éditeur de texte sont stockées dans un dossier distinct, sauf si l’option d’ajout à la bibliothèque est cochée.
 
 ## Accès aux documents
 

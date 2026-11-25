@@ -4,7 +4,6 @@ import {appelAjax} from "/composant/fonction/ajax.js";
 import {getData} from "/composant/fonction/page.js";
 
 const lesInformations = getData("lesInformations") ?? [];
-const lesPhotos = getData("lesPhotos") ?? [];
 const lesIllustrations = getData("lesIllustrations") ?? [];
 const lignes = document.getElementById("lesLignesInformation");
 const formulaire = document.getElementById("formInformation");
@@ -65,7 +64,7 @@ function validerEtapeCourante() {
     if (etapeCourante === 2) {
         const editeur = window.tinymce?.get("description");
         const contenu = editeur ? editeur.getContent() : description.value;
-        const texte = StdText(contenu);
+        const texte = extraireTexte(contenu);
         if (texte === "" && !/<img\b/i.test(contenu)) {
             const message = document.createElement("div");
             message.className = "alert alert-danger";
@@ -79,7 +78,7 @@ function validerEtapeCourante() {
     return true;
 }
 
-function StdText(html) {
+function extraireTexte(html) {
     const zone = document.createElement("div");
     zone.innerHTML = html;
     return (zone.textContent || "").replace(/\s+/g, " ").trim();
@@ -160,7 +159,6 @@ function mettreAJourBibliothequeImages(nomsFichiers) {
     const selectionActuelle = illustration.value;
     illustration.replaceChildren(new Option("Aucune image (logo par défaut)", ""));
     lesIllustrations.splice(0, lesIllustrations.length);
-    lesPhotos.splice(0, lesPhotos.length);
 
     for (const nom of nomsFichiers) {
         const image = {
@@ -169,10 +167,6 @@ function mettreAJourBibliothequeImages(nomsFichiers) {
         };
         lesIllustrations.push(image);
         ajouterOptionIllustration(image);
-        lesPhotos.push({
-            title: nom,
-            value: image.url
-        });
     }
 
     illustration.value = nomsFichiers.includes(selectionActuelle) ? selectionActuelle : "";
@@ -197,12 +191,6 @@ async function televerserImageDansLeContenu(blobInfo, progress) {
     }
 
     if (resultat.bibliotheque) {
-        if (!lesPhotos.some(image => image.value === resultat.url)) {
-            lesPhotos.push({
-                title: resultat.nom,
-                value: resultat.url
-            });
-        }
         if (!lesIllustrations.some(image => image.nom === resultat.nom)) {
             lesIllustrations.push({
                 nom: resultat.nom,
@@ -507,7 +495,7 @@ function initialiserEditeurDescription() {
         selector: "#description",
         menubar: false,
         plugins: "link image lists table autoresize code quickbars",
-        toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | link image | bullist numlist | table | removeformat",
+        toolbar: "undo redo | bold italic underline | alignleft aligncenter alignright | link image | bullist numlist | table | removeformat | code",
         toolbar_location: "top",
         toolbar_mode: "wrap",
         toolbar_sticky: false,

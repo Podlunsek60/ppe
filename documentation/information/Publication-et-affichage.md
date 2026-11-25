@@ -25,14 +25,13 @@ Les requêtes sont préparées avec PDO. Le titre et la description sont envoyé
 
 ### Parcours du formulaire
 
-Le formulaire d’administration organise la rédaction en quatre étapes visuelles :
+Le formulaire d’administration organise la rédaction en trois étapes :
 
-1. **Les essentiels** : titre, visibilité et date de fin de publication.
-2. **Image ou logo** : choisir une illustration existante ou téléverser une image.
-3. **Documents PDF** : sélectionner un ou plusieurs PDF facultatifs.
-4. **Rédaction** : saisir le contenu avec l’éditeur TinyMCE.
+1. **Essentiel** : titre, visibilité et date de fin de publication.
+2. **Sujet** : rédiger le contenu avec TinyMCE et insérer, si besoin, des images.
+3. **Facultatif** : vérifier l’aperçu en direct, choisir l’illustration principale et sélectionner les PDF.
 
-Les panneaux Image et PDF sont facultatifs. Le serveur exige toutefois un titre et une description contenant du texte ou une image. La visibilité et la date d’expiration sont préremplies, mais restent modifiables.
+L’illustration principale et les PDF sont facultatifs. Le serveur exige toutefois un titre et une description contenant du texte ou une image. La visibilité et la date d’expiration sont préremplies, mais restent modifiables.
 
 ## Publication publique ou privée
 
@@ -55,7 +54,7 @@ Le nettoyage est effectué avant l’écriture et lors de la préparation des do
 
 Une information peut n’avoir aucune illustration : l’affichage utilise alors son pictogramme de remplacement. L’illustration principale est un nom de fichier existant dans `public/data/photoinformation/`. Dans le formulaire, elle dispose d’une section **Image ou logo** distincte de la section réservée aux PDF.
 
-La page d’administration [`/administration/photoinformation/`](../../public/administration/photoinformation/index.php) est la bibliothèque réutilisable des images par défaut. Les images téléversées depuis cette page apparaissent dans le choix d’illustration lors de la création d’une actualité. La même bibliothèque est utilisée par la liste d’images de TinyMCE. La liste des fichiers du répertoire est obtenue une seule fois côté PHP, puis convertie dans les deux formats de données attendus par TinyMCE et le menu d’illustrations.
+La page d’administration [`/administration/photoinformation/`](../../public/administration/photoinformation/index.php) est la bibliothèque réutilisable des illustrations principales. Les images téléversées depuis cette page apparaissent dans le choix d’illustration lors de la création d’une actualité. La liste du répertoire est chargée côté PHP et transmise au navigateur pour construire ce menu.
 
 Depuis le formulaire, les liens « Gérer les images par défaut » et « Ajouter des images réutilisables à la bibliothèque » ouvrent cette page dans un nouvel onglet afin de préserver le brouillon. Après chaque ajout ou suppression, la bibliothèque transmet la liste mise à jour par `BroadcastChannel` ; le menu déroulant et son aperçu sont alors actualisés sans recharger le formulaire.
 
@@ -63,9 +62,9 @@ Sur la page bibliothèque, l’administrateur peut ajouter des images par glisse
 
 La bibliothèque réutilise les utilitaires communs de l’application : `fichierValide` et `verifierImage` côté navigateur, `InputFileImg` et `ImageManager` côté serveur, ainsi que `FileManager` pour lister et supprimer les fichiers. Le droit `photoinformation` est contrôlé à la fois sur les endpoints d’ajout et de suppression ; une image encore associée à une actualité ne peut pas être supprimée.
 
-Le formulaire affiche un aperçu, y compris un emplacement visuel quand aucune image n’est choisie. Son bouton d’ajout direct envoie le fichier à `ajax/ajouterillustration.php` avec `FormData`. Le serveur valide et redimensionne l’image avec les mêmes outils que la bibliothèque, renvoie son nom et son URL, puis le navigateur réutilise la même fonction pour ajouter l’option au menu et afficher l’aperçu. Cette image est placée dans le même répertoire de bibliothèque ; son nom est inclus dans la prochaine sauvegarde de l’information.
+Le formulaire affiche un aperçu, y compris un emplacement visuel quand aucune image n’est choisie. Son bouton d’ajout direct téléverse l’illustration principale vers `ajax/ajouterillustration.php` avec `FormData`. Le serveur valide et redimensionne l’image avec les mêmes outils que la bibliothèque, puis le navigateur ajoute l’option au menu et affiche l’aperçu. Cette illustration est placée dans `photoinformation/`; son nom est enregistré avec l’information.
 
-La barre d’outils TinyMCE peut également insérer des images dans la description ; ces images sont différentes de l’illustration principale.
+La barre d’outils TinyMCE téléverse les images insérées dans la description via le même endpoint. Par défaut, elles sont stockées dans `informationcontenu/`, séparément de la bibliothèque. La case « Ajouter les images insérées au texte à la bibliothèque », décochée par défaut, permet de les enregistrer dans `photoinformation/`. Ces images ne remplacent pas l’illustration principale.
 
 ## Documents PDF
 

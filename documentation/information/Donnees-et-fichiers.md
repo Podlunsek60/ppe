@@ -33,7 +33,7 @@ Le schéma est défini dans [`sql/information/create.sql`](../../sql/information
 | `nomStocke` | Nom physique généré par le serveur |
 | `consultations` | Compteur de téléchargements/consultations |
 
-La clé étrangère avec `ON DELETE CASCADE` garantit que supprimer une information supprime aussi ses lignes document en SQL. Les fichiers physiques doivent néanmoins être effacés par le code : MySQL ne peut pas supprimer des fichiers du disque.
+La clé étrangère avec `ON DELETE CASCADE` garantit que supprimer une information supprime aussi ses lignes document en SQL. MySQL ne supprime pas les fichiers physiques sur le disque : la suppression planifiée des informations expirées peut donc laisser leurs PDF dans `public/data/documentinformation/`. Les suppressions faites depuis l’administration continuent, elles, à passer par le code qui efface les fichiers.
 
 ## Index et contraintes
 
@@ -56,15 +56,22 @@ Les validations PHP complètent ces contraintes : elles produisent des messages 
 Les chemins absolus sont définis dans [`bootstrap/bootstrap.php`](../../bootstrap/bootstrap.php) :
 
 - illustrations : `DOSSIER_PHOTO_INFORMATION`, sous `public/data/photoinformation/` ;
+- images insérées dans le texte : `DOSSIER_IMAGE_CONTENU_INFORMATION`, sous `public/data/informationcontenu/` ;
 - PDF : `DOSSIER_DOCUMENT_INFORMATION`, sous `public/data/documentinformation/`.
 
-Les réglages des PDF sont dans [`config/documentinformation.php`](../../config/documentinformation.php) : 20 Mo maximum, extension PDF et types MIME PDF. Les réglages d’illustration sont dans [`config/image.php`](../../config/image.php) : 300 Ko, formats JPEG/PNG/GIF, largeur de 350 px et limite source de 12 mégapixels.
+Les réglages des PDF sont dans [`config/documentinformation.php`](../../config/documentinformation.php) : 20 Mo maximum, extension PDF et types MIME PDF. Les réglages des images sont dans [`config/image.php`](../../config/image.php) : 300 Ko, formats JPEG/PNG/GIF, largeur maximale de 350 px après redimensionnement et limite source de 12 mégapixels.
 
-## Expiration
+L’illustration principale est toujours ajoutée à la bibliothèque. Les images téléversées depuis l’éditeur de texte vont par défaut dans `informationcontenu/`; la case « Ajouter les images insérées au texte à la bibliothèque » permet de les stocker dans `photoinformation/` à la place.
 
-Les méthodes de consultation appellent `supprimerLesObsoletes`. La méthode récupère les noms des PDF expirés, supprime les lignes information (les lignes enfants sont effacées en cascade), puis supprime les fichiers physiques connus.
+## Suppression planifiée des informations expirées
 
-L’expiration est donc appliquée à la première consultation qui déclenche cette méthode, pas par un planificateur à heure fixe. `dateExpiration >= CURDATE()` maintient également le filtrage de visibilité dans les lectures.
+Le script [`event.sql`](../../sql/information/event.sql) crée l’événement MySQL `supprimer_informations_obsoletes`. Il s’exécute chaque jour à minuit et supprime les lignes dont `dateExpiration` est antérieure à la date courante. La clé étrangère supprime en cascade les lignes associées dans `documentinformation`.
+
+L’événement remplace la suppression déclenchée par les consultations dans `Information`. Les requêtes d’affichage conservent leurs filtres sur la date : une publication expirée n’est donc plus visible même si l’événement n’a pas encore pu s’exécuter.
+
+Pour que l’événement tourne, MySQL doit avoir `event_scheduler` activé et le compte qui crée l’événement doit disposer du privilège `EVENT`. Vérifier l’état avec `SHOW VARIABLES LIKE 'event_scheduler';`. Si nécessaire, activer le planificateur au démarrage du serveur MySQL (`event_scheduler=ON`) selon la configuration de l’hébergement ; les possibilités de modification à chaud dépendent des privilèges et de la version de MySQL.
+
+**Limite importante :** un événement SQL ne peut pas supprimer les PDF du système de fichiers. Les PDF liés aux informations expirées sont donc dissociés et leurs fichiers peuvent rester sur le disque. Ne les supprimez pas par une commande SQL ; leur nettoyage doit être traité séparément au niveau applicatif ou serveur.
 
 ## Compteur de consultation
 
@@ -76,5 +83,6 @@ Lorsqu’un document est autorisé, `obtenirDocumentVisible` incrémente `consul
 - [`insert.sql`](../../sql/information/insert.sql) : données initiales/exemples du module.
 - [`update.sql`](../../sql/information/update.sql) : migration de schéma ciblée pour une base déjà créée.
 - [`permission.sql`](../../sql/information/permission.sql) : enregistre la fonction `information` et accorde les droits `information` et `photoinformation` à l’administrateur initial (ID 1).
+- [`event.sql`](../../sql/information/event.sql) : crée ou remplace l’événement quotidien de suppression des informations expirées.
 
 Lire les commentaires du script avant exécution : un script d’installation initiale et une migration sur base existante n’ont pas le même usage.

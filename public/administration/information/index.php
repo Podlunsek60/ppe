@@ -9,13 +9,6 @@ use ClasseTechnique\Page;
 require $_SERVER['DOCUMENT_ROOT'] . '/../bootstrap/bootstrap.php';
 
 $lesNomsImages = Std::getLesFichiers(DOSSIER_PHOTO_INFORMATION, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'avif']);
-$lesPhotos = array_map(
-    static fn(string $photo): array => [
-        'title' => $photo,
-        'value' => '/data/photoinformation/' . rawurlencode($photo),
-    ],
-    $lesNomsImages
-);
 $lesIllustrations = array_map(
     static fn(string $photo): array => [
         'nom' => $photo,
@@ -28,7 +21,6 @@ $page = new Page();
 $page->setTitre('Gestion des informations')
     ->addScript('/composant/tinymce/tinymce.min.js')
     ->setDonnee('lesInformations', Information::getAllAdmin())
-    ->setDonnee('lesPhotos', $lesPhotos)
     ->setDonnee('lesIllustrations', $lesIllustrations)
     ->avecJeton()
     ->afficher();
